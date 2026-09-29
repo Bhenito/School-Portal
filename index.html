@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Score Management System - Basic 4 to 9</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            color: #007BFF;
+            margin-bottom: 5px;
+        }
+
+        .card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .secondary-btn {
+            background-color: #6c757d;
+            margin-top: 10px;
+        }
+
+        .secondary-btn:hover {
+            background-color: #5a6268;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            float: right;
+            width: auto;
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn:hover {
+            background-color: #a71d2a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: #a71d2a;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error-msg {
+            color: #dc3545;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .success-msg {
+            color: #28a745;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .role-badge {
+            display: inline-block;
+            background: #e2e3e5;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #383d41;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- LOGIN VIEW -->
+        <div id="loginView">
+            <header>
+                <h1>School Portal Login</h1>
+                <p>Sign in to access your dashboard (Basic 4 - Basic 9)</p>
+            </header>
+            <div class="card">
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="loginUser">Username:</label>
+                        <input type="text" id="loginUser" required placeholder="Enter username">
+                    </div>
+                    <div class="input-group">
+                        <label for="loginPass">Password:</label>
+                        <input type="password" id="loginPass" required placeholder="Enter password">
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                    <p id="loginError" class="error-msg hidden">Invalid username or password!</p>
+                </form>
+                <button type="button" class="btn secondary-btn" onclick="switchView('registerView')">Create Teacher Account</button>
+            </div>
+            <p style="text-align: center; font-size: 0.9rem; color: #666;">
+                <em>Default Admin: Username: <b>admin</b> | Password: <b>password123</b></em>
+            </p>
+        </div>
+
+        <!-- REGISTER VIEW -->
+        <div id="registerView" class="hidden">
+            <header>
+                <h1>Teacher Registration</h1>
+                <p>Create your account to manage scores</p>
+            </header>
+            <div class="card">
+                <form id="registerForm">
+                    <div class="input-group">
+                        <label for="regUser">Username:</label>
+                        <input type="text" id="regUser" required placeholder="Choose a username">
+                    </div>
+                    <div class="input-group">
+                        <label for="regPass">Password:</label>
+                        <input type="password" id="regPass" required placeholder="Choose a password">
+                    </div>
+                    <div class="input-group">
+                        <label for="regRole">Select Role:</label>
+                        <select id="regRole" onchange="toggleAssignmentField()" required>
+                            <option value="">-- Select Role --</option>
+                            <option value="Subject Teacher">Subject Teacher</option>
+                            <option value="Class Teacher">Class Teacher (Basic 4 - 9)</option>
+                        </select>
+                    </div>
+                    <div class="input-group" id="assignmentGroup">
+                        <label id="assignmentLabel" for="regAssignment">Assignment Details:</label>
+                        <div id="dynamicAssignmentContainer">
+                            <input type="text" id="regSubject" required placeholder="e.g., Mathematics">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Register Account</button>
+                    <p id="regError" class="error-msg hidden">Username already exists!</p>
+                    <p id="regSuccess" class="success-msg hidden">Account created successfully! You can now log in.</p>
+                </form>
+                <button type="button" class="btn secondary-btn" onclick="switchView('loginView')">Back to Login</button>
+            </div>
+        </div>
+
+        <!-- DASHBOARD VIEW -->
+        <div id="dashboardView" class="hidden">
+            <header>
+                <button type="button" class="btn logout-btn" onclick="logout()">Logout</button>
+                <h1 id="dashTitle">Management Dashboard</h1>
+                <div id="userRoleBadge" class="role-badge">Role</div>
+            </header>
+
+            <!-- Input Form -->
+            <div class="card" id="formCard">
+                <h3 id="formHeading">Add Student Score Record</h3>
+                <form id="scoreForm">
+                    <div class="input-group">
+                        <label for="studentName">Student Name:</label>
+                        <input type="text" id="studentName" required placeholder="e.g., Kofi Mensah">
+                    </div>
+                    <div class="input-group">
+                        <label for="studentClass">Class:</label>
+                        <select id="studentClass" required>
+                            <option value="">-- Select Class --</option>
+                            <option value="Basic 4">Basic 4</option>
+                            <option value="Basic 5">Basic 5</option>
+                            <option value="Basic 6">Basic 6</option>
+                            <option value="Basic 7">Basic 7</option>
+                            <option value="Basic 8">Basic 8</option>
+                            <option value="Basic 9">Basic 9</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="subject">Subject:</label>
+                        <input type="text" id="subject" required placeholder="e.g., Mathematics, Science, Computing">
+                    </div>
+                    <div class="input-group">
+                        <label for="score">Score (0 - 100):</label>
+                        <input type="number" id="score" min="0" max="100" required placeholder="e.g., 85">
+                    </div>
+                    <button type="submit" class="btn">Save Record</button>
+                </form>
+            </div>
+
+            <!-- Records Table -->
+            <div class="card">
+                <h3 id="tableHeading">Recorded Scores</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Class</th>
+                            <th>Subject</th>
+                            <th>Score</th>
+                            <th>Grade</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Dynamic rows -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const loginView = document.getElementById('loginView');
+        const registerView = document.getElementById('registerView');
+        const dashboardView = document.getElementById('dashboardView');
+        
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const scoreForm = document.getElementById('scoreForm');
+        
+        const loginError = document.getElementById('loginError');
+        const regError = document.getElementById('regError');
+        const regSuccess = document.getElementById('regSuccess');
+        
+        const tableBody = document.getElementById('tableBody');
+        const dashTitle = document.getElementById('dashTitle');
+        const userRoleBadge = document.getElementById('userRoleBadge');
+
+        window.addEventListener('DOMContentLoaded', function() {
+            let currentUser = sessionStorage.getItem('currentUser');
+            if (currentUser) {
+                showDashboard(JSON.parse(currentUser));
+            }
+        });
+
+        function switchView(viewName) {
+            loginView.classList.add('hidden');
+            registerView.classList.add('hidden');
+            dashboardView.classList.add('hidden');
+            document.getElementById(viewName).classList.remove('hidden');
+        }
+
+        function toggleAssignmentField() {
+            const role = document.getElementById('regRole').value;
+            const container = document.getElementById('dynamicAssignmentContainer');
+            const label = document.getElementById('assignmentLabel');
+
+            if (role === 'Subject Teacher') {
+                label.innerText = 'Assigned Subject:';
+                container.innerHTML = '<input type="text" id="regSubjectInput" required placeholder="e.g., Mathematics">';
+            } else if (role === 'Class Teacher') {
+                label.innerText = 'Choose Class & Subject:';
+                container.innerHTML = `
+                    <div style="display: flex; gap: 10px;">
+                        <select id="regClassSelect" required style="flex: 1;">
+                            <option value="">-- Select Class --</option>
+                            <option value="Basic 4">Basic 4</option>
+                            <option value="Basic 5">Basic 5</option>
+                            <option value="Basic 6">Basic 6</option>
+                            <option value="Basic 7">Basic 7</option>
+                            <option value="Basic 8">Basic 8</option>
+                            <option value="Basic 9">Basic 9</option>
+                        </select>
+                        <input type="text" id="regSubjectInput" required placeholder="e.g., Mathematics" style="flex: 1;">
+                    </div>
+                `;
+            } else {
+                container.innerHTML = '<input type="text" id="regSubjectInput" placeholder="e.g., Mathematics">';
+            }
+        }
+
+        // Handle Teacher Registration
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('regUser').value.trim();
+            const password = document.getElementById('regPass').value.trim();
+            const role = document.getElementById('regRole').value;
+            
+            let assignedClass = 'All';
+            let assignedSubject = 'All';
+
+            if (role === 'Subject Teacher') {
+                assignedSubject = document.getElementById('regSubjectInput').value.trim();
+            } else if (role === 'Class Teacher') {
+                assignedClass = document.getElementById('regClassSelect').value;
+                assignedSubject = document.getElementById('regSubjectInput').value.trim();
+            }
+
+            let users = JSON.parse(localStorage.getItem('schoolUsers')) || [];
+            
+            if (users.some(u => u.username === username) || username === 'admin') {
+                regError.classList.remove('hidden');
+                regSuccess.classList.add('hidden');
+                return;
+            }
+
+            users.push({ username, password, role, assignedClass, assignedSubject });
+            localStorage.setItem('schoolUsers', JSON.stringify(users));
+
+            regError.classList.add('hidden');
+            regSuccess.classList.remove('hidden');
+            registerForm.reset();
+        });
+
+        // Handle Login
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUser').value.trim();
+            const password = document.getElementById('loginPass').value.trim();
+
+            if (username === 'admin' && password === 'password123') {
+                const adminUser = { username: 'admin', role: 'Admin', assignedClass: 'All', assignedSubject: 'All' };
+                sessionStorage.setItem('currentUser', JSON.stringify(adminUser));
+                showDashboard(adminUser);
+                loginForm.reset();
+                loginError.classList.add('hidden');
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('schoolUsers')) || [];
+            const foundUser = users.find(u => u.username === username && u.password === password);
+
+            if (foundUser) {
+                sessionStorage.setItem('currentUser', JSON.stringify(foundUser));
+                showDashboard(foundUser);
+                loginForm.reset();
+                loginError.classList.add('hidden');
+            } else {
+                loginError.classList.remove('hidden');
+            }
+        });
+
+        function showDashboard(user) {
+            switchView('dashboardView');
+            dashTitle.innerText = `Welcome, ${user.username}`;
+            
+            if (user.role === 'Admin') {
+                userRoleBadge.innerText = `Role: Admin (Full Access)`;
+            } else if (user.role === 'Class Teacher') {
+                userRoleBadge.innerText = `Role: Class Teacher (${user.assignedClass} - ${user.assignedSubject})`;
+            } else {
+                userRoleBadge.innerText = `Role: Subject Teacher (${user.assignedSubject})`;
+            }
+
+            const subjectInput = document.getElementById('subject');
+            const classSelect = document.getElementById('studentClass');
+
+            if (user.role === 'Subject Teacher') {
+                subjectInput.value = user.assignedSubject;
+                subjectInput.setAttribute('readonly', true);
+                classSelect.removeAttribute('disabled');
+            } else if (user.role === 'Class Teacher') {
+                classSelect.value = user.assignedClass;
+                classSelect.setAttribute('disabled', true);
+                subjectInput.value = user.assignedSubject;
+                subjectInput.setAttribute('readonly', true);
+            } else {
+                subjectInput.removeAttribute('readonly');
+                classSelect.removeAttribute('disabled');
+            }
+
+            displayRecords(user);
+        }
+
+        function logout() {
+            sessionStorage.removeItem('currentUser');
+            document.getElementById('subject').removeAttribute('readonly');
+            document.getElementById('studentClass').removeAttribute('disabled');
+            switchView('loginView');
+        }
+
+        function calculateGrade(score) {
+            if (score >= 80) return 'A (Excellent)';
+            if (score >= 70) return 'B (Very Good)';
+            if (score >= 60) return 'C (Good)';
+            if (score >= 50) return 'D (Pass)';
+            return 'F (Fail)';
+        }
+
+        function getRecords() {
+            let records = localStorage.getItem('schoolScores');
+            return records ? JSON.parse(records) : [];
+        }
+
+        function displayRecords(user) {
+            tableBody.innerHTML = '';
+            let records = getRecords();
+
+            let visibleRecords = records.filter(record => {
+                if (user.role === 'Admin') return true;
+                if (user.role === 'Subject Teacher') {
+                    return record.subject.toLowerCase() === user.assignedSubject.toLowerCase();
+                }
+                if (user.role === 'Class Teacher') {
+                    return record.studentClass.toLowerCase() === user.assignedClass.toLowerCase() && 
+                           record.subject.toLowerCase() === user.assignedSubject.toLowerCase();
+                }
+                return false;
+            });
+
+            visibleRecords.forEach((record) => {
+                const globalIndex = records.findIndex(r => r === record);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${record.name}</td>
+                    <td>${record.studentClass}</td>
+                    <td>${record.subject}</td>
+                    <td>${record.score}</td>
+                    <td>${record.grade}</td>
+                    <td><button class="delete-btn" onclick="deleteRecord(${globalIndex})">Delete</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        scoreForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = JSON.parse(sessionStorage.getItem('currentUser'));
+
+            const name = document.getElementById('studentName').value.trim();
+            const studentClass = document.getElementById('studentClass').value;
+            const subject = document.getElementById('subject').value.trim();
+            const score = parseFloat(document.getElementById('score').value);
+            const grade = calculateGrade(score);
+
+            const newRecord = { name, studentClass, subject, score, grade };
+
+            let records = getRecords();
+            records.push(newRecord);
+            localStorage.setItem('schoolScores', JSON.stringify(records));
+
+            scoreForm.reset();
+            
+            if (user.role === 'Subject Teacher') document.getElementById('subject').value = user.assignedSubject;
+            if (user.role === 'Class Teacher') {
+                document.getElementById('studentClass').value = user.assignedClass;
+                document.getElementById('subject').value = user.assignedSubject;
+            }
+
+            displayRecords(user);
+        });
+
+        function deleteRecord(globalIndex) {
+            let records = getRecords();
+            records.splice(globalIndex, 1);
+            localStorage.setItem('schoolScores', JSON.stringify(records));
+            
+            const user = JSON.parse(sessionStorage.getItem('currentUser'));
+            displayRecords(user);
+        }
+    </script>
+</body>
+</html>
