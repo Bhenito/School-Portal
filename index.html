@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Score Management System - Basic 4 to 9</title>
+    <title>Christ Leading International School - School Score Management System</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,10 +25,21 @@
         header {
             text-align: center;
             margin-bottom: 25px;
+            position: relative;
         }
 
         header h1 {
             color: #007BFF;
+            margin-bottom: 5px;
+            font-size: 1.8rem;
+        }
+
+        .school-subtitle {
+            font-size: 1.1rem;
+            color: #555;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             margin-bottom: 5px;
         }
 
@@ -37,6 +48,67 @@
             padding: 20px;
             border-radius: 6px;
             margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .stat-card.green {
+            background: #e8f5e9;
+        }
+
+        .stat-card.orange {
+            background: #fff3e0;
+        }
+
+        .stat-card h4 {
+            margin: 0 0 5px 0;
+            color: #0d47a1;
+            font-size: 0.95rem;
+        }
+
+        .stat-card.green h4 {
+            color: #1b5e20;
+        }
+
+        .stat-card.orange h4 {
+            color: #e65100;
+        }
+
+        .stat-card p {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0;
+            color: #1565c0;
+        }
+
+        .stat-card.green p {
+            color: #2e7d32;
+        }
+
+        .stat-card.orange p {
+            color: #ef6c00;
+            font-size: 1.1rem;
+            text-align: left;
+            margin-top: 5px;
+        }
+
+        .stat-card.orange ul {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 0.9rem;
+            font-weight: normal;
         }
 
         .input-group {
@@ -83,7 +155,9 @@
 
         .logout-btn {
             background-color: #dc3545;
-            float: right;
+            position: absolute;
+            right: 0;
+            top: 0;
             width: auto;
             padding: 6px 12px;
             font-size: 0.9rem;
@@ -162,8 +236,9 @@
         <!-- LOGIN VIEW -->
         <div id="loginView">
             <header>
+                <div class="school-subtitle">Christ Leading International School</div>
                 <h1>School Portal Login</h1>
-                <p>Sign in to access your dashboard (Basic 4 - Basic 9)</p>
+                <p>Sign in to access your dashboard (Basic 1 - Basic 9)</p>
             </header>
             <div class="card">
                 <form id="loginForm">
@@ -178,17 +253,18 @@
                     <button type="submit" class="btn">Login</button>
                     <p id="loginError" class="error-msg hidden">Invalid username or password!</p>
                 </form>
-                <button type="button" class="btn secondary-btn" onclick="switchView('registerView')">Create Teacher Account</button>
+                <button type="button" class="btn secondary-btn" onclick="switchView('registerView')">Create Account</button>
             </div>
             <p style="text-align: center; font-size: 0.9rem; color: #666;">
-                <em>Default Admin: Username: <b>admin</b> | Password: <b>password123</b></em>
+                <em>Demo only: do not use real credentials or real student data.</em>
             </p>
         </div>
 
         <!-- REGISTER VIEW -->
         <div id="registerView" class="hidden">
             <header>
-                <h1>Teacher Registration</h1>
+                <div class="school-subtitle">Christ Leading International School</div>
+                <h1>Account Registration</h1>
                 <p>Create your account to manage scores</p>
             </header>
             <div class="card">
@@ -205,8 +281,9 @@
                         <label for="regRole">Select Role:</label>
                         <select id="regRole" onchange="toggleAssignmentField()" required>
                             <option value="">-- Select Role --</option>
+                            <option value="Admin">Admin / Headteacher</option>
                             <option value="Subject Teacher">Subject Teacher</option>
-                            <option value="Class Teacher">Class Teacher (Basic 4 - 9)</option>
+                            <option value="Class Teacher">Class Teacher (Basic 1 - 9)</option>
                         </select>
                     </div>
                     <div class="input-group" id="assignmentGroup">
@@ -227,9 +304,38 @@
         <div id="dashboardView" class="hidden">
             <header>
                 <button type="button" class="btn logout-btn" onclick="logout()">Logout</button>
+                <div class="school-subtitle">Christ Leading International School</div>
                 <h1 id="dashTitle">Management Dashboard</h1>
                 <div id="userRoleBadge" class="role-badge">Role</div>
             </header>
+
+            <!-- Statistics Overview -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Registered Teachers</h4>
+                    <p id="statTeachers">0</p>
+                </div>
+                <div class="stat-card green">
+                    <h4>Total Students</h4>
+                    <p id="statStudents">0</p>
+                </div>
+                <div class="stat-card orange">
+                    <h4>Students per Class</h4>
+                    <p id="statClassBreakdown">
+                        <ul>
+                            <li>Basic 1: 0</li>
+                            <li>Basic 2: 0</li>
+                            <li>Basic 3: 0</li>
+                            <li>Basic 4: 0</li>
+                            <li>Basic 5: 0</li>
+                            <li>Basic 6: 0</li>
+                            <li>Basic 7: 0</li>
+                            <li>Basic 8: 0</li>
+                            <li>Basic 9: 0</li>
+                        </ul>
+                    </p>
+                </div>
+            </div>
 
             <!-- Input Form -->
             <div class="card" id="formCard">
@@ -243,6 +349,9 @@
                         <label for="studentClass">Class:</label>
                         <select id="studentClass" required>
                             <option value="">-- Select Class --</option>
+                            <option value="Basic 1">Basic 1</option>
+                            <option value="Basic 2">Basic 2</option>
+                            <option value="Basic 3">Basic 3</option>
                             <option value="Basic 4">Basic 4</option>
                             <option value="Basic 5">Basic 5</option>
                             <option value="Basic 6">Basic 6</option>
@@ -331,6 +440,9 @@
                     <div style="display: flex; gap: 10px;">
                         <select id="regClassSelect" required style="flex: 1;">
                             <option value="">-- Select Class --</option>
+                            <option value="Basic 1">Basic 1</option>
+                            <option value="Basic 2">Basic 2</option>
+                            <option value="Basic 3">Basic 3</option>
                             <option value="Basic 4">Basic 4</option>
                             <option value="Basic 5">Basic 5</option>
                             <option value="Basic 6">Basic 6</option>
@@ -342,11 +454,12 @@
                     </div>
                 `;
             } else {
-                container.innerHTML = '<input type="text" id="regSubjectInput" placeholder="e.g., Mathematics">';
+                label.innerText = 'Assignment Details:';
+                container.innerHTML = '<span style="color: #666; font-size: 0.9rem;">Admin has full access to all classes and subjects.</span>';
             }
         }
 
-        // Handle Teacher Registration
+        // Handle Registration
         registerForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const username = document.getElementById('regUser').value.trim();
@@ -365,7 +478,7 @@
 
             let users = JSON.parse(localStorage.getItem('schoolUsers')) || [];
             
-            if (users.some(u => u.username === username) || username === 'admin') {
+            if (users.some(u => u.username === username)) {
                 regError.classList.remove('hidden');
                 regSuccess.classList.add('hidden');
                 return;
@@ -385,15 +498,6 @@
             const username = document.getElementById('loginUser').value.trim();
             const password = document.getElementById('loginPass').value.trim();
 
-            if (username === 'admin' && password === 'password123') {
-                const adminUser = { username: 'admin', role: 'Admin', assignedClass: 'All', assignedSubject: 'All' };
-                sessionStorage.setItem('currentUser', JSON.stringify(adminUser));
-                showDashboard(adminUser);
-                loginForm.reset();
-                loginError.classList.add('hidden');
-                return;
-            }
-
             let users = JSON.parse(localStorage.getItem('schoolUsers')) || [];
             const foundUser = users.find(u => u.username === username && u.password === password);
 
@@ -412,7 +516,7 @@
             dashTitle.innerText = `Welcome, ${user.username}`;
             
             if (user.role === 'Admin') {
-                userRoleBadge.innerText = `Role: Admin (Full Access)`;
+                userRoleBadge.innerText = `Role: Admin / Headteacher (Full Access)`;
             } else if (user.role === 'Class Teacher') {
                 userRoleBadge.innerText = `Role: Class Teacher (${user.assignedClass} - ${user.assignedSubject})`;
             } else {
@@ -433,9 +537,12 @@
                 subjectInput.setAttribute('readonly', true);
             } else {
                 subjectInput.removeAttribute('readonly');
+                subjectInput.value = '';
                 classSelect.removeAttribute('disabled');
+                classSelect.value = '';
             }
 
+            updateStats();
             displayRecords(user);
         }
 
@@ -459,6 +566,32 @@
             return records ? JSON.parse(records) : [];
         }
 
+        function updateStats() {
+            let users = JSON.parse(localStorage.getItem('schoolUsers')) || [];
+            let records = getRecords();
+            
+            // Total registered teachers
+            document.getElementById('statTeachers').innerText = users.length;
+            
+            // Total unique students in the school
+            let uniqueStudents = new Set(records.map(r => r.name.toLowerCase().trim())).size;
+            document.getElementById('statStudents').innerText = uniqueStudents;
+
+            // Class breakdown (Basic 1 - 9)
+            const classes = ['Basic 1', 'Basic 2', 'Basic 3', 'Basic 4', 'Basic 5', 'Basic 6', 'Basic 7', 'Basic 8', 'Basic 9'];
+            let breakdownHtml = '<ul>';
+            
+            classes.forEach(cls => {
+                // Get unique student names per class
+                let classRecords = records.filter(r => r.studentClass === cls);
+                let classUniqueStudents = new Set(classRecords.map(r => r.name.toLowerCase().trim())).size;
+                breakdownHtml += `<li>${cls}: ${classUniqueStudents}</li>`;
+            });
+            breakdownHtml += '</ul>';
+
+            document.getElementById('statClassBreakdown').innerHTML = breakdownHtml;
+        }
+
         function displayRecords(user) {
             tableBody.innerHTML = '';
             let records = getRecords();
@@ -479,15 +612,25 @@
                 const globalIndex = records.findIndex(r => r === record);
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${record.name}</td>
-                    <td>${record.studentClass}</td>
-                    <td>${record.subject}</td>
+                    <td>${escapeHtml(record.name)}</td>
+                    <td>${escapeHtml(record.studentClass)}</td>
+                    <td>${escapeHtml(record.subject)}</td>
                     <td>${record.score}</td>
-                    <td>${record.grade}</td>
+                    <td>${escapeHtml(record.grade)}</td>
                     <td><button class="delete-btn" onclick="deleteRecord(${globalIndex})">Delete</button></td>
                 `;
                 tableBody.appendChild(row);
             });
+            updateStats();
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
         }
 
         scoreForm.addEventListener('submit', function(e) {
@@ -508,8 +651,9 @@
 
             scoreForm.reset();
             
-            if (user.role === 'Subject Teacher') document.getElementById('subject').value = user.assignedSubject;
-            if (user.role === 'Class Teacher') {
+            if (user.role === 'Subject Teacher') {
+                document.getElementById('subject').value = user.assignedSubject;
+            } else if (user.role === 'Class Teacher') {
                 document.getElementById('studentClass').value = user.assignedClass;
                 document.getElementById('subject').value = user.assignedSubject;
             }
